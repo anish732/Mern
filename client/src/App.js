@@ -6,6 +6,7 @@ import Landing from "./components/layout/Landing";
 import Register from "./components/auth/Register";
 import Login from "./components/auth/Login";
 import Alert from "./components/layout/Alert";
+import Chat from "./components/layout/Chat";
 
 //Redux
 import { Provider } from "react-redux";
@@ -15,20 +16,7 @@ import "./App.css";
 class App extends React.Component {
   constructor(props) {
     super(props);
-    readChat(msg => {
-      console.log("message from soket.io", msg);
-    });
   }
-  state = {
-    msg: ""
-  };
-  handleTyping = e => {
-    this.setState({ msg: e.target.value });
-  };
-  handleSubmit = () => {
-    console.log("clicked");
-    sendChat(this.state.msg);
-  };
   render() {
     return (
       <>
@@ -41,15 +29,11 @@ class App extends React.Component {
               <Switch>
                 <Route exact path="/register" component={Register} />
                 <Route exact path="/login" component={Login} />
+                <Route exact path="/chat" component={Chat} />
               </Switch>
             </section>
           </Router>
         </Provider>
-        <p className="App-intro">
-          This is the timer value: {this.state.timestamp}
-        </p>
-        <input onChange={this.handleTyping}></input>
-        <button onClick={this.handleSubmit}>Submit</button>
       </>
     );
   }
