@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment, useEffect } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { subscribeToTimer, readChat, sendChat } from "./sockethelper.js";
 import Navbar from "./components/layout/Navbar";
@@ -11,32 +11,38 @@ import Chat from "./components/layout/Chat";
 //Redux
 import { Provider } from "react-redux";
 import store from "./store";
+import { loadUser } from "./actions/auth";
+import setAuthToken from "./utils/setAuthToken";
+
 import "./App.css";
 
-class App extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-  render() {
-    return (
-      <>
-        <Provider store={store}>
-          <Router>
-            <Navbar />
-            <Route exact path="/" component={Landing} />
-            <section className="container">
-              <Alert />
-              <Switch>
-                <Route exact path="/register" component={Register} />
-                <Route exact path="/login" component={Login} />
-                <Route exact path="/chat" component={Chat} />
-              </Switch>
-            </section>
-          </Router>
-        </Provider>
-      </>
-    );
-  }
+if (localStorage.token) {
+  setAuthToken(localStorage.token);
 }
+
+const App = () => {
+  useEffect(() => {
+    store.dispatch(loadUser());
+  }, []);
+
+  return (
+    <>
+      <Provider store={store}>
+        <Router>
+          <Navbar />
+          <Route exact path="/" component={Landing} />
+          <section className="container">
+            <Alert />
+            <Switch>
+              <Route exact path="/register" component={Register} />
+              <Route exact path="/login" component={Login} />
+              <Route exact path="/chat" component={Chat} />
+            </Switch>
+          </section>
+        </Router>
+      </Provider>
+    </>
+  );
+};
 
 export default App;
